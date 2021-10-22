@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, shell } = require('electron')
 const path = require('path')
 
 function createWindow () {
@@ -19,17 +19,51 @@ function createWindow () {
     mainWindow.webContents.openDevTools()
 
 
-    var menu = Menu.buildFromTemplate([
+    /**
+     * this is a menu object in which we define the menus and submenus present in the main page
+     * @type {Electron.Menu}
+     * the template is an array, meaning it is possible to create multiple menus having multiple submenus each
+     */
+    const menu = Menu.buildFromTemplate([
         {
             label: 'Menu',
-            submenu:[
-                { label: 'adjust notification value'},
-                { label: 'CoinMarketCap'},
-                { label: 'exit'},
+            /**
+             * those are the links to other pages, the main page is the current, by defining subItems
+             * we can put actions and references on subItem interaction
+             */
+            submenu: [
+                {label: 'adjust notification value'},
+                {
+                    label: 'CoinMarketCap',
+                    click() {
+                        /**
+                         * in this case we open an external link, it is based on promise, so we can specify what to do
+                         * next with the use of .then
+                         */
+                        shell.openExternal('http://coinMarketCap.com').then(r => {
+                        })
+                    }
+                },
+                {
+                    label: 'exit',
+                    /**
+                     * here we define an action based on click event, click() is a function of MenuItemConstructionOptions
+                     * that is abstract and optional, so we must implement what to do on click
+                     */
+                    click() {
+                        app.exit()// in this case we need to quit application on exit
+                    }
+                },
 
             ]
+        },
+        {
+            /**
+             * for now it is empty, and is used just as an example of a multimenu
+             */
+            label: 'info'
         }
-    ])
+    ]);
 
     Menu.setApplicationMenu(menu)
 }
