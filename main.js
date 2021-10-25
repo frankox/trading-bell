@@ -3,11 +3,8 @@ const { app, BrowserWindow, Menu, shell } = require('electron')
 const path = require('path')
 
 function createWindow () {
-    // Create the browser window.
+    // region Create the main browser window.
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -70,6 +67,31 @@ function createWindow () {
     ]);
 
     Menu.setApplicationMenu(menu)
+    //endregion
+
+    //region handle secondary windows
+    mainWindow.webContents.setWindowOpenHandler(({url}) => {
+        //it is possible to diversify the returned window options based on input path or other params
+        switch (url){
+            default: return {
+                action: 'allow',
+                overrideBrowserWindowOptions: {
+                    width:400,
+                    height: 200,
+                    transparent: true,
+                    modal: true,
+                    parent: mainWindow,
+                    frame: false,
+                    fullscreenable: false,
+                    backgroundColor: 'black',
+                   /* webPreferences: {
+                        preload: 'child-window-preload-script.js'
+                    }*/
+                }
+            }
+        }
+    })
+    //endregion
 }
 
 // This method will be called when Electron has finished
