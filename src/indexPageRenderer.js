@@ -1,7 +1,7 @@
 const path = require('path')
 
 //region behaviours
-//region button behaviours
+//region open AddAlarm window
 /**
  * here we say that onClick of the retrieved button we want to go to the add page
  * @type {HTMLElement}

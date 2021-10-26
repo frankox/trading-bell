@@ -81,9 +81,11 @@ function createWindow () {
                     transparent: true,
                     modal: true,
                     parent: mainWindow,
-                    frame: false,
                     fullscreenable: false,
                     backgroundColor: 'black',
+                    webPreferences: {
+                        nodeIntegration: true
+                    }
                    /* webPreferences: {
                         preload: 'child-window-preload-script.js'
                     }*/

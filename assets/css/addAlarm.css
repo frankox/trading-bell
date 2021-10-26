@@ -26,7 +26,7 @@ input {
 #closeBtn {
     cursor:pointer;
     padding:20px;
-    text-decoration:underline;
+    background-color: aquamarine;
 }
 
 html, body {
