@@ -1,0 +1,1 @@
+const cryptocompareApiKey = 'insert-your-api-key-here'
