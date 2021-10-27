@@ -1,14 +1,14 @@
 {
   "name": "trading-bell",
   "version": "1.0.0",
-  "description": "",
+  "description": "simple app that notifies you based on a market price you set yourself",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron . electron main.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Matteo Franchini",
   "license": "ISC",
   "devDependencies": {
     "electron": "15.3.0"
