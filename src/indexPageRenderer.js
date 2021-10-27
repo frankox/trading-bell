@@ -1,4 +1,4 @@
-import {CRYPTOCOMPARE_READONLY_APIKEY} from '/src/utils/configs.local'
+
 const path = require('path')
 const axios = require("axios")
 
@@ -13,10 +13,11 @@ const targetPrice = document.getElementById('target-price')
 //region getCurrentPrice
 //region mainFunction
 function getCurrentPrice(){
-    axios.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH,DASH&tsyms=BTC,USD,EUR&api_key='+CRYPTOCOMPARE_READONLY_APIKEY)
+    axios.get('https://min-api.cryptocompare.com/data/price?fsym=OHM&tsyms=EUR')
         .then(response =>{
             const cryptos = response.data
-            console.log(cryptos)
+            price.innerText = cryptos.EUR
+            console.log(response)
         })
 }
 //endregion
