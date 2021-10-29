@@ -5,26 +5,41 @@
 <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-<!--    <meta content="default-src 'self'; script-src 'self'" http-equiv="Content-Security-Policy">-->
     <meta content="default-src 'self' https://min-api.cryptocompare.com/; script-src 'self' https://min-api.cryptocompare.com/; connect-src https://min-api.cryptocompare.com/" http-equiv="Content-Security-Policy">
-
     <meta http-equiv="X-UA-compatible" content="ie=edge">
     <title>Add alarm</title>
     <link rel="stylesheet" href="../../assets/css/index.css">
     <link rel="stylesheet" href="../../assets/css/addAlarm.css">
 </head>
-
 <body>
-<p class="notifyTxt">Notify me when BTC reaches...</p>
+<p class="notifyTxt">Notify me when OHM reaches...</p>
 
 <div class = "row2">
     <div>
-        <input id="notifyVal" placeholder="USD">
-        <button id="updateBtn">Update</button>
+        <label for="target-price-input"></label><input id="target-price-input" placeholder="EUR">
+        <button id="target-price-update-btn" onclick="porcodio()">Update</button>
     </div>
 </div>
+<!-- You can also require other files to run in this process --><!--
+<script src="addAlarmRender.js" ></script>-->
+<script>
+    const {BrowserWindow, ipcRenderer}= require('electron')
+    //region set-up or update target price
+    /**
+     * on click, the value in input is sent to main process, which dispatches it to whom needs it
+     */
 
-<!-- You can also require other files to run in this process -->
-<script src="addAlarmRender.js"></script>
+    function porcodio(){
+        ipcRenderer.send('update-target-value',
+            args=>{
+                args.returnValue = document.getElementById('target-price-input').value
+            })
+
+        console.log("diocane")
+        //close window
+        BrowserWindow.getFocusedWindow().close()
+    }
+    //endregion
+</script>
 </body>
 </html>

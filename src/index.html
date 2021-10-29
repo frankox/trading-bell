@@ -5,8 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-   <!-- <meta content="default-src 'self'; script-src 'self'" http-equiv="Content-Security-Policy">
-   --> <meta content="default-src 'self' https://min-api.cryptocompare.com/; script-src 'self' https://min-api.cryptocompare.com/; connect-src https://min-api.cryptocompare.com/" http-equiv="Content-Security-Policy">
+    <meta content="default-src 'self' https://min-api.cryptocompare.com/; script-src 'self' https://min-api.cryptocompare.com/; connect-src https://min-api.cryptocompare.com/" http-equiv="Content-Security-Policy">
     <meta http-equiv="X-UA-compatible" content="ie=edge">
     <title>Main page</title>
     <link rel="stylesheet" href="../assets/css/index.css">
@@ -14,7 +13,7 @@
 <body>
 <div class = "row">
     <div id="price-container">
-        <p class="subtext">current BTC/USD</p>
+        <p class="subtext">current OHM/EUR</p>
         <h1 id="price">loading...</h1>
     </div>
     <div id="goal-container">
@@ -23,10 +22,11 @@
         </p>
     </div>
     <div id="right-container">
-        <button id="notifyBtn"> Notify me when...</button>
+        <label for="target-price-input"></label><input id="target-price-input" placeholder="EUR">
+        <button id="update-alarm-update-btn">update</button>
     </div>
 </div>
 <!-- You can also require other files to run in this process -->
-<script src="./indexPageRenderer.js"></script>
+<script type="text/javascript"  src="indexPageRenderer.js" ></script>
 </body>
 </html>
