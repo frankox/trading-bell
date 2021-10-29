@@ -21,9 +21,10 @@ setInterval(getCurrentPrice, 30000) //every 30 secs
 
 //region target price
 const targetPrice = document.getElementById('target-price')
+const targetPriceInput = document.getElementById("target-price-input")
 const updateAlarmBtn = document.getElementById("update-alarm-update-btn")
 updateAlarmBtn.addEventListener('click',function() {
-    targetPrice.innerText = '$'+Number(arg).toLocaleString('en')
+    targetPrice.innerText = 'Current Target: $'+Number(targetPriceInput.value).toLocaleString('en')
 })
 //endregion
 
