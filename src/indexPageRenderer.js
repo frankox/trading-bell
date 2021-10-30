@@ -1,5 +1,3 @@
-const {ipcRenderer, BrowserWindow} = require('electron')
-const path = require('path')
 const axios = require("axios")
 
 //region enums
@@ -68,21 +66,6 @@ function getCurrentPrice() {
 getCurrentPrice()
 setInterval(getCurrentPrice, 30000) //every 30 secs
 //endregion
-
-
-
-//for now we'll use only main window
-/*//region notify
-/!**
- * here we say that onClick of the retrieved button we want to go to the add page
- * @type {HTMLElement}
- *!/
-const updateAlarmBtn = document.getElementById("updateAlarmBtn")
-updateAlarmBtn.addEventListener('click',function(){
-    const modalPath = path.join('file://', __dirname,'/addAlarm/addAlarm.html')
-    window.open(modalPath, 'modal');
-})
-//endregion*/
 
 
 
