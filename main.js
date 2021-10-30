@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Menu, shell, ipcMain } = require('electron')
+const { app, BrowserWindow, Menu, shell } = require('electron')
 const path = require('path')
 
 function createWindow () {
@@ -41,8 +41,7 @@ function createWindow () {
                          * in this case we open an external link, it is based on promise, so we can specify what to do
                          * next with the use of .then
                          */
-                        shell.openExternal('http://coinMarketCap.com').then(r => {
-                        })
+                        shell.openExternal('https://coinMarketCap.com')
                     }
                 },
                 {
@@ -87,21 +86,11 @@ function createWindow () {
                         nodeIntegration: true,
                         devTools: true
                     }
-                    /* webPreferences: {
-                         preload: 'child-window-preload-script.js'
-                     }*/
                 }
             }
         }
     })
     //endregion
-
-    /*//region handle events -- we'll use it in the future if there will be more than one window
-    ipcMain.on('update-target-value', function (event, arg) {
-        mainWindow.webContents.send('target-price-value', arg)
-        console.log("message sent")
-    })
-    //endregion*/
 }
 
 // This method will be called when Electron has finished
