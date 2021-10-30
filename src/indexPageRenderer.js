@@ -16,14 +16,7 @@ const tokens = {
 //region target price
 const targetPrice = document.getElementById('target-price')
 const targetPriceInput = document.getElementById("target-price-input")
-const updateAlarmBtn = document.getElementById("update-alarm-update-btn")
-let currentTarget
-updateAlarmBtn.addEventListener('click',function() {
-    const targetValue = Number(targetPriceInput.value)
-
-    targetPrice.innerText = 'Current Target: €'+targetValue.toLocaleString('en')
-    currentTarget = targetValue
-})
+const currentTarget = () => {return Number(targetPriceInput.value)}
 //endregion
 
 //region current price
@@ -56,8 +49,11 @@ function getCurrentPriceAndSendNotification() {
             price.innerText = response.data.EUR
         })
 
-    const currentState = currentTargetState(price.innerText, currentTarget)
-    if (currentState && currentState !== previousState) {
+    const currentState = currentTargetState(price.innerText, currentTarget())
+    if(currentState === TargetStates.NONE){
+        previousState = currentState
+
+    } else if (currentState && currentState !== previousState) {
         creatNotification(tokens.OHM, currentState)
         previousState = currentState
     }
@@ -66,7 +62,7 @@ function getCurrentPriceAndSendNotification() {
 
 //region scheduler
 getCurrentPriceAndSendNotification()
-setInterval(getCurrentPriceAndSendNotification, 3000) //every 30 secs
+setInterval(getCurrentPriceAndSendNotification, 3000) //every 3 secs
 //endregion
 
 

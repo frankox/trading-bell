@@ -7,27 +7,56 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta content="default-src 'self' https://min-api.cryptocompare.com/; script-src 'self' https://min-api.cryptocompare.com/; connect-src https://min-api.cryptocompare.com/" http-equiv="Content-Security-Policy">
     <meta http-equiv="X-UA-compatible" content="ie=edge">
-    <title>Main page</title>
+    <title>OHM</title>
     <link rel="stylesheet" href="../assets/css/index.css">
 </head>
 <body>
-<div class = "row">
-    <div id="price-container">
+<div class = "rowHeader">
+    <div class="headerRowItem1" id="price-container">
         <p class="subtext">current OHM/EUR</p>
         <h1 id="price">loading...</h1>
     </div>
-    <div id="goal-container">
-        <p>
-            <span id="target-price">Choose a target price</span>
-        </p>
-    </div>
-    <div class = "row2">
-        <div>
-            <label for="target-price-input"></label><input id="target-price-input" placeholder="EUR">
-            <button id="update-alarm-update-btn">update</button>
-        </div>
+    <div class="headerRowItem2">
+        <label for="target-price-input">CURRENT TARGET: </label><input class="input-field" id="target-price-input" placeholder="EUR">
     </div>
 </div>
+
+<div class="row1">
+    <div class="rowItem1">
+        <label for="total-staked">TOTAL STAKED: </label><input class="input-field" id="total-staked"  value="100" placeholder="100">
+    </div>
+    <div class="rowItem2">
+        <h3 id="total-staked-value-title">VALUE: </h3><span id="total-staked-value">Loading...</span>
+    </div>
+    <div class = "rowItem3">
+        <h3 id="rebase-rate-title">REBASE RATE: </h3><span id="rebase-rate">Loading...</span>
+    </div>
+</div>
+
+<div class="row2">
+    <div class = "rowItem1">
+        <label for="days-value">DAYS: </label><input class="input-field" id="days-value"  value="365" placeholder="365">
+    </div>
+    <div class="rowItem2">
+        <h3 id="days-percentage-title">%: </h3><span id="days-percentage-value">Loading...</span>
+    </div>
+    <div class="rowItem3">
+        <h3 id="days-value-title">€: </h3><span id="days-money-value">Loading...</span>
+    </div>
+</div>
+
+<div class="row2">
+    <div class = "rowItem1">
+        <label for="target-value">€: </label><input class="input-field" id="target-value" value="100000" placeholder="1">
+    </div>
+    <div class="rowItem2">
+        <h3 id="value-percentage-title">%: </h3><span id="value-percentage-value">Loading...</span>
+    </div>
+    <div class="rowItem3">
+        <h3 id="days-remaining-value-title">DAYS REMAINING: </h3><span id="days-remaining-value">Loading...</span>
+    </div>
+</div>
+
 <!-- You can also require other files to run in this process -->
 <script type="text/javascript"  src="indexPageRenderer.js" ></script>
 </body>
