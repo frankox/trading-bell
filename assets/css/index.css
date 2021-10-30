@@ -74,7 +74,7 @@ body {
 #goal-container {
     padding:20px;
 }
-.input-field{
+input{
     background-color: transparent;
     color: whitesmoke;
     margin:0;

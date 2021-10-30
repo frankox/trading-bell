@@ -14,7 +14,6 @@ const tokens = {
 //endregion
 
 //region target price
-const targetPrice = document.getElementById('target-price')
 const targetPriceInput = document.getElementById("target-price-input")
 const currentTarget = () => {return Number(targetPriceInput.value)}
 //endregion
@@ -43,10 +42,13 @@ function creatNotification(tokenName, currentTargetState){
 }
 
 //endregion
+
+let currentPrice
 function getCurrentPriceAndSendNotification() {
     axios.get('https://min-api.cryptocompare.com/data/price?fsym=OHM&tsyms=EUR')
         .then(response => {
-            price.innerText = response.data.EUR
+            currentPrice = Number(response.data.EUR)
+            price.innerText = currentPrice
         })
 
     const currentState = currentTargetState(price.innerText, currentTarget())
@@ -61,9 +63,28 @@ function getCurrentPriceAndSendNotification() {
 //endregion
 
 //region scheduler
-getCurrentPriceAndSendNotification()
-setInterval(getCurrentPriceAndSendNotification, 3000) //every 3 secs
+function updateFieldsAndSendNotifications(){
+    getCurrentPriceAndSendNotification()
+    displayTotalStakedValue()
+}
+setInterval(updateFieldsAndSendNotifications, 3000) //every 3 secs
 //endregion
 
+//region value per staked token
+const totalStakedInput = document.getElementById("total-staked")
+const totalStaked = ()=>{return Number(totalStakedInput.value)}
+const totalStakedValue = document.getElementById("total-staked-value")
 
+function calculateValuePerToken(){
+    return currentPrice && totalStaked() !== 0 ? totalStaked() * currentPrice : "Loading..."
+}
+
+function displayTotalStakedValue(){
+    totalStakedValue.innerText = calculateValuePerToken()
+}
+
+totalStakedInput.addEventListener('change',function (){
+    displayTotalStakedValue()
+})
+//endregion
 
