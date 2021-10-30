@@ -17,11 +17,12 @@ const tokens = {
 const targetPrice = document.getElementById('target-price')
 const targetPriceInput = document.getElementById("target-price-input")
 const updateAlarmBtn = document.getElementById("update-alarm-update-btn")
-const targetValue = ()=>{ return Number(targetPriceInput.value)}
-let currentTarget = targetValue()
+let currentTarget
 updateAlarmBtn.addEventListener('click',function() {
-    targetPrice.innerText = 'Current Target: €'+targetValue().toLocaleString('en')
-    currentTarget = targetValue()
+    const targetValue = Number(targetPriceInput.value)
+
+    targetPrice.innerText = 'Current Target: €'+targetValue.toLocaleString('en')
+    currentTarget = targetValue
 })
 //endregion
 
@@ -30,7 +31,7 @@ const price = document.getElementById('price')
 //region notification
 let previousState = TargetStates.NONE
 const currentTargetState = (price, target) =>{
-    return target === 0 ?
+    return !target || target === 0 ?
         TargetStates.NONE :
         target < price ?
             TargetStates.ABOVE :
@@ -52,12 +53,10 @@ function creatNotification(tokenName, currentTargetState){
 function getCurrentPriceAndSendNotification() {
     axios.get('https://min-api.cryptocompare.com/data/price?fsym=OHM&tsyms=EUR')
         .then(response => {
-            const cryptos = response.data
-            price.innerText = cryptos.EUR
+            price.innerText = response.data.EUR
         })
 
-    console.log(targetValue())
-    const currentState = currentTargetState(price.innerText, targetValue())
+    const currentState = currentTargetState(price.innerText, currentTarget)
     if (currentState && currentState !== previousState) {
         creatNotification(tokens.OHM, currentState)
         previousState = currentState
