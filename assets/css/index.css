@@ -22,7 +22,7 @@ body {
 }
 
 .headerRowItem2{
-    grid-column: 3;
+    grid-column: 2/3;
     grid-row: 1;
 }
 
@@ -50,7 +50,6 @@ body {
     grid-auto-rows: minmax(50px, auto);
 }
 
-
 .rowItem1{
     grid-column: 1;
     grid-row: 1;
@@ -65,6 +64,7 @@ body {
     grid-column: 3;
     grid-row: 1;
 }
+
 #price-container {
     margin-left: 20%;
     background:#353535;

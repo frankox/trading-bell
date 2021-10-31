@@ -1,27 +1,46 @@
 const axios = require("axios")
 const CoinGecko = require('coingecko-api')
 
-//region coinGecko api setup
-//2. Initiate the CoinGecko API Client
+//region api calls
+//Initiate the CoinGecko API Client
 const CoinGeckoClient = new CoinGecko()
 
-//3. Make calls ---> TODO: for call infos: https://github.com/miscavage/CoinGecko-API https://www.coingecko.com/en/api/documentation?
+// TODO: for call infos: https://github.com/miscavage/CoinGecko-API https://www.coingecko.com/en/api/documentation?
 const ping = async() => {
-    let data = await CoinGeckoClient.ping()
+    await CoinGeckoClient.ping()
 }
+
+const coinData = async()=> {
+    return CoinGeckoClient.simple.price({
+        ids: ['wonderland', 'olympus', 'klima-dao'],
+        vs_currencies: ['eur', 'usd'],
+    });
+}
+
 //endregion
 
 //region enums
 const TargetStates = {
-    ABOVE: "above",
-    BELOW: "below",
-    NONE: "none"
+    ABOVE: 'above',
+    BELOW: 'below',
+    NONE: 'none'
 }
-const tokens = {
-    TIME: "TIME",
-    OHM: "OHM",
-    KLIMA: "KLIMA"
+
+const tokensData = {
+    TIME: {
+        SYMBOL: 'TIME',
+        API_VERSION: 'wonderland'
+    },
+    OHM: {
+        SYMBOL: 'OHM',
+        API_VERSION: 'olympus'
+    },
+    KLIMA:{
+        SYMBOL: 'KLIMA',
+        API_VERSION: 'klima-dao'
+    },
 }
+
 //endregion
 
 //region target price
@@ -54,28 +73,34 @@ function creatNotification(tokenName, currentTargetState){
 
 //endregion
 
+let currentData
 let currentPrice
-function getCurrentPriceAndSendNotification() {
-    axios.get('https://min-api.cryptocompare.com/data/price?fsym=OHM&tsyms=EUR')
-        .then(response => {
-            currentPrice = Number(response.data.EUR)
-            price.innerText = currentPrice
-        })
+function getCurrentPrice() {
+    coinData().then((response)=>{
+        currentData = response.data
+        currentPrice = currentData.wonderland.usd
+        price.innerText = currentPrice
+    })
 
-    const currentState = currentTargetState(price.innerText, currentTarget())
+}
+//endregion
+//region notification
+function sendNotifications(){
+    const currentState = currentTargetState(currentPrice, currentTarget())
     if(currentState === TargetStates.NONE){
         previousState = currentState
 
     } else if (currentState && currentState !== previousState) {
-        creatNotification(tokens.OHM, currentState)
+        creatNotification(tokensData.OHM, currentState)
         previousState = currentState
     }
 }
-//endregion
+// endregion
 
 //region scheduler
 function updateFieldsAndSendNotifications(){
-    getCurrentPriceAndSendNotification()
+    getCurrentPrice()
+    sendNotifications()
     displayTotalStakedValue()
 }
 setInterval(updateFieldsAndSendNotifications, 3000) //every 3 secs
@@ -86,11 +111,11 @@ const totalStakedInput = document.getElementById("total-staked")
 const totalStaked = ()=>{return Number(totalStakedInput.value)}
 const totalStakedValue = document.getElementById("total-staked-value")
 
-function calculateValuePerToken(){
-    return currentPrice && totalStaked() !== 0 ? totalStaked() * currentPrice : "Loading..."
+const calculateValuePerToken = ()=>{
+    return currentData && totalStaked() !== 0 ? totalStaked() * currentData : "Loading..."
 }
 
-function displayTotalStakedValue(){
+const displayTotalStakedValue = ()=>{
     totalStakedValue.innerText = calculateValuePerToken()
 }
 
@@ -99,3 +124,77 @@ totalStakedInput.addEventListener('change',function (){
 })
 //endregion
 
+//region rebaseRate
+const rebaseRateInput = document.getElementById("rebase-rate-input")
+const rebaseValue = (epocs, value)=>{
+    return epocs >= 1 ?
+    rebaseValue(epocs-1, value+ value*rebaseRateInput.value/100) :
+        value
+}
+
+const epocsRemainingCount = (start, end, count)=> {
+    return start >= end ?
+        count + epocsRemaining(start+ start*rebaseRateInput.value/100, end)  :
+        count
+}
+
+const epocsRemaining = (start, end) => {
+    return epocsRemainingCount(start, end, 0)
+}
+
+const rebaseRate = document.getElementById("rebase-rate")
+rebaseRateInput.addEventListener('change',function (){
+    rebaseRate.innerText = rebaseRateInput.value+"%"
+
+})
+//endregion
+
+//region updateFields
+const daysValueInput = document.getElementById("days-value")
+const daysValue = ()=>{return Number(daysValueInput.value)}
+daysValueInput.addEventListener('change',function (){
+    updateDaysTokens()
+    updateDaysMoneyValue()
+})
+
+const targetValueInput = document.getElementById("target-value")
+const targetValue = ()=>{return Number(targetValueInput.value)}
+targetValueInput.addEventListener('change',function (){
+    updateDaysRemainingMoney()
+})
+
+const tokenTargetInput = document.getElementById("token-target")
+const tokenTarget = ()=>{return Number(tokenTargetInput.value)}
+targetValueInput.addEventListener('change',function (){
+    updateDaysRemainingToken()
+})
+
+const daysTokens = document.getElementById("days-token-value")
+const daysMoneyValue = document.getElementById("days-money-value")
+const daysRemainingMoney = document.getElementById("days-remaining-value")
+const daysRemainingToken = document.getElementById("days-remaining-value")
+
+function updateDaysTokens(){
+    daysTokens.innerText = Number(rebaseRateInput.value) > 0 && totalStaked() > 0 ?
+        rebaseValue(3*daysValue(), totalStaked()) : "Loading..."
+}
+function updateDaysMoneyValue(){
+    daysMoneyValue.innerText = Number(rebaseRateInput.value) > 0 && totalStaked() > 0 ?
+        rebaseValue(3*daysValue(), currentPrice) : "Loading..."
+}
+function updateDaysRemainingMoney(){
+    daysRemainingMoney.innerText = targetValue() > 0 && totalStaked() > 0 &&  Number(rebaseRateInput.value) > 0  ?
+        epocsRemaining(calculateValuePerToken(), targetValue()) : "Loading..."
+}
+function updateDaysRemainingToken(){
+    daysRemainingToken.innerText = tokenTarget() > 0 && totalStaked() > 0 &&  Number(rebaseRateInput.value) > 0  ?
+        epocsRemaining(calculateValuePerToken(), targetValue()) : "Loading..."
+}
+
+function updateFields(){
+    updateDaysTokens()
+    updateDaysMoneyValue()
+    updateDaysRemainingMoney()
+    updateDaysRemainingToken()
+}
+//endregion

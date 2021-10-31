@@ -17,7 +17,8 @@
         <h1 id="price">loading...</h1>
     </div>
     <div class="headerRowItem2">
-        <label for="target-price-input">CURRENT TARGET: </label><input class="input-field" id="target-price-input" placeholder="EUR">
+        <label for="target-price-input">SET TARGET: </label><input class="input-field" id="target-price-input" placeholder="EUR">
+        <label for="rebase-rate-input">REBASE RATE: </label><input class="input-field" id="rebase-rate-input" placeholder="%">
     </div>
 </div>
 
@@ -38,7 +39,7 @@
         <label for="days-value">DAYS: </label><input class="input-field" id="days-value"  value="365" placeholder="365">
     </div>
     <div class="rowItem2">
-        <h3 id="days-percentage-title">%: </h3><span id="days-percentage-value">Loading...</span>
+        <h3 id="days-token-title">STAKED: </h3><span id="days-token-value">Loading...</span>
     </div>
     <div class="rowItem3">
         <h3 id="days-value-title">EUR: </h3><span id="days-money-value">Loading...</span>
@@ -47,13 +48,21 @@
 
 <div class="row2">
     <div class = "rowItem1">
-        <label for="target-value">EUR: </label><input class="input-field" id="target-value" value="100000" placeholder="100000">
+        <label for="target-value">TARGET €: </label><input class="input-field" id="target-value" value="100000" placeholder="100000">
     </div>
-    <div class="rowItem2">
-        <h3 id="value-percentage-title">%: </h3><span id="value-percentage-value">Loading...</span>
-    </div>
+
     <div class="rowItem3">
         <h3 id="days-remaining-value-title">DAYS REMAINING: </h3><span id="days-remaining-value">Loading...</span>
+    </div>
+</div>
+
+<div class="row2">
+    <div class = "rowItem1">
+        <label for="token-target">TARGET STAKED: </label><input class="input-field" id="token-target" value="100" placeholder="100">
+    </div>
+
+    <div class="rowItem3">
+        <h3 id="days-remaining-token-title">DAYS REMAINING: </h3><span id="days-remaining-token">Loading...</span>
     </div>
 </div>
 
