@@ -1,4 +1,15 @@
 const axios = require("axios")
+const CoinGecko = require('coingecko-api')
+
+//region coinGecko api setup
+//2. Initiate the CoinGecko API Client
+const CoinGeckoClient = new CoinGecko()
+
+//3. Make calls ---> TODO: for call infos: https://github.com/miscavage/CoinGecko-API https://www.coingecko.com/en/api/documentation?
+const ping = async() => {
+    let data = await CoinGeckoClient.ping()
+}
+//endregion
 
 //region enums
 const TargetStates = {
