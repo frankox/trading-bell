@@ -1,4 +1,4 @@
-const axios = require("axios")
+
 const CoinGecko = require('coingecko-api')
 
 //region api calls
@@ -78,7 +78,7 @@ let currentPrice
 function getCurrentPrice() {
     coinData().then((response)=>{
         currentData = response.data
-        currentPrice = currentData.wonderland.usd
+        currentPrice = currentData.wonderland.eur
         price.innerText = currentPrice
     })
 
@@ -102,6 +102,7 @@ function updateFieldsAndSendNotifications(){
     getCurrentPrice()
     sendNotifications()
     displayTotalStakedValue()
+    updateFields()
 }
 setInterval(updateFieldsAndSendNotifications, 3000) //every 3 secs
 //endregion
@@ -112,7 +113,7 @@ const totalStaked = ()=>{return Number(totalStakedInput.value)}
 const totalStakedValue = document.getElementById("total-staked-value")
 
 const calculateValuePerToken = ()=>{
-    return currentData && totalStaked() !== 0 ? totalStaked() * currentData : "Loading..."
+    return currentData && totalStaked() !== 0 ? totalStaked() * currentData.wonderland.usd : "Loading..."
 }
 
 const displayTotalStakedValue = ()=>{
@@ -132,14 +133,10 @@ const rebaseValue = (epocs, value)=>{
         value
 }
 
-const epocsRemainingCount = (start, end, count)=> {
-    return start >= end ?
-        count + epocsRemaining(start+ start*rebaseRateInput.value/100, end)  :
-        count
-}
-
-const epocsRemaining = (start, end) => {
-    return epocsRemainingCount(start, end, 0)
+const epocsRemaining = (start, end)=> {
+    return start < end ?
+        1+epocsRemaining(start+ start*rebaseRateInput.value/100, end)  :
+        0
 }
 
 const rebaseRate = document.getElementById("rebase-rate")
@@ -172,7 +169,7 @@ targetValueInput.addEventListener('change',function (){
 const daysTokens = document.getElementById("days-token-value")
 const daysMoneyValue = document.getElementById("days-money-value")
 const daysRemainingMoney = document.getElementById("days-remaining-value")
-const daysRemainingToken = document.getElementById("days-remaining-value")
+const daysRemainingToken = document.getElementById("days-remaining-token")
 
 function updateDaysTokens(){
     daysTokens.innerText = Number(rebaseRateInput.value) > 0 && totalStaked() > 0 ?
