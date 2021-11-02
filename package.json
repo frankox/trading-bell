@@ -11,7 +11,8 @@
   "author": "Matteo Franchini",
   "license": "ISC",
   "devDependencies": {
-    "electron": "15.3.0"
+    "electron": "15.3.0",
+    "jest": "^27.3.1"
   },
   "dependencies": {
     "axios": "^0.24.0",
