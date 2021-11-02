@@ -113,7 +113,7 @@ const totalStaked = ()=>{return Number(totalStakedInput.value)}
 const totalStakedValue = document.getElementById("total-staked-value")
 
 const calculateValuePerToken = ()=>{
-    return currentData && totalStaked() !== 0 ? totalStaked() * currentData.wonderland.usd : "Loading..."
+    return currentData && totalStaked() !== 0 ? totalStaked() * currentData.wonderland.eur : "Loading..."
 }
 
 const displayTotalStakedValue = ()=>{
@@ -177,7 +177,7 @@ function updateDaysTokens(){
 }
 function updateDaysMoneyValue(){
     daysMoneyValue.innerText = Number(rebaseRateInput.value) > 0 && totalStaked() > 0 ?
-        rebaseValue(3*daysValue(), currentPrice) : "Loading..."
+        daysTokens.innerText * currentPrice : "Loading..."
 }
 function updateDaysRemainingMoney(){
     daysRemainingMoney.innerText = targetValue() > 0 && totalStaked() > 0 &&  Number(rebaseRateInput.value) > 0  ?
