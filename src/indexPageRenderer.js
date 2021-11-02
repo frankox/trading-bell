@@ -1,47 +1,8 @@
-
-const CoinGecko = require('coingecko-api')
-
-//region api calls
-//Initiate the CoinGecko API Client
-const CoinGeckoClient = new CoinGecko()
-
-// TODO: for call infos: https://github.com/miscavage/CoinGecko-API https://www.coingecko.com/en/api/documentation?
-const ping = async() => {
-    await CoinGeckoClient.ping()
-}
-
-const coinData = async()=> {
-    return CoinGeckoClient.simple.price({
-        ids: ['wonderland', 'olympus', 'klima-dao'],
-        vs_currencies: ['eur', 'usd'],
-    });
-}
-
-//endregion
-
-//region enums
-const TargetStates = {
-    ABOVE: 'above',
-    BELOW: 'below',
-    NONE: 'none'
-}
-
-const tokensData = {
-    TIME: {
-        SYMBOL: 'TIME',
-        API_VERSION: 'wonderland'
-    },
-    OHM: {
-        SYMBOL: 'OHM',
-        API_VERSION: 'olympus'
-    },
-    KLIMA:{
-        SYMBOL: 'KLIMA',
-        API_VERSION: 'klima-dao'
-    },
-}
-
-//endregion
+import {currentTargetState, TargetStates} from "./utils/targetStates.js";
+import {tokensData} from "./utils/tokensData.js";
+import {coinData} from "./utils/Apis.js";
+import {creatNotification} from "./utils/notification.js";
+import {epocsRemaining, rebase} from "./utils/rebase.js";
 
 //region target price
 const targetPriceInput = document.getElementById("target-price-input")
@@ -50,28 +11,7 @@ const currentTarget = () => {return Number(targetPriceInput.value)}
 
 //region current price
 const price = document.getElementById('price')
-//region notification
 let previousState = TargetStates.NONE
-const currentTargetState = (price, target) =>{
-    return !target || target === 0 ?
-        TargetStates.NONE :
-        target < price ?
-            TargetStates.ABOVE :
-            TargetStates.BELOW
-}
-
-const notificationText = (token, currentTargetState) =>{
-    return {
-        title: token + " Alert",
-        body: token +" has gone " + currentTargetState + " your target price!"
-    }
-}
-function creatNotification(tokenName, currentTargetState){
-    const notificationOptions = notificationText(tokenName, currentTargetState)
-    return new window.Notification(notificationOptions.title, notificationOptions)
-}
-
-//endregion
 
 let currentData
 let currentPrice
@@ -81,15 +21,14 @@ function getCurrentPrice() {
         currentPrice = currentData.wonderland.eur
         price.innerText = currentPrice
     })
-
 }
 //endregion
+
 //region notification
 function sendNotifications(){
     const currentState = currentTargetState(currentPrice, currentTarget())
     if(currentState === TargetStates.NONE){
         previousState = currentState
-
     } else if (currentState && currentState !== previousState) {
         creatNotification(tokensData.OHM, currentState)
         previousState = currentState
@@ -112,7 +51,7 @@ const totalStakedInput = document.getElementById("total-staked")
 const totalStaked = ()=>{return Number(totalStakedInput.value)}
 const totalStakedValue = document.getElementById("total-staked-value")
 
-const calculateValuePerToken = ()=>{
+const calculateValuePerToken = (tokens, value)=>{
     return currentData && totalStaked() !== 0 ? totalStaked() * currentData.wonderland.eur : "Loading..."
 }
 
@@ -127,22 +66,9 @@ totalStakedInput.addEventListener('change',function (){
 
 //region rebaseRate
 const rebaseRateInput = document.getElementById("rebase-rate-input")
-const rebaseValue = (epocs, value)=>{
-    return epocs >= 1 ?
-    rebaseValue(epocs-1, value+ value*rebaseRateInput.value/100) :
-        value
-}
-
-const epocsRemaining = (start, end)=> {
-    return start < end ?
-        1+epocsRemaining(start+ start*rebaseRateInput.value/100, end)  :
-        0
-}
-
 const rebaseRate = document.getElementById("rebase-rate")
 rebaseRateInput.addEventListener('change',function (){
     rebaseRate.innerText = rebaseRateInput.value+"%"
-
 })
 //endregion
 
@@ -173,7 +99,7 @@ const daysRemainingToken = document.getElementById("days-remaining-token")
 
 function updateDaysTokens(){
     daysTokens.innerText = Number(rebaseRateInput.value) > 0 && totalStaked() > 0 ?
-        rebaseValue(3*daysValue(), totalStaked()) : "Loading..."
+        rebase(3*daysValue(), Number(rebaseRateInput.value), totalStaked()) : "Loading..."
 }
 function updateDaysMoneyValue(){
     daysMoneyValue.innerText = Number(rebaseRateInput.value) > 0 && totalStaked() > 0 ?
@@ -181,11 +107,11 @@ function updateDaysMoneyValue(){
 }
 function updateDaysRemainingMoney(){
     daysRemainingMoney.innerText = targetValue() > 0 && totalStaked() > 0 &&  Number(rebaseRateInput.value) > 0  ?
-        epocsRemaining(calculateValuePerToken(), targetValue()) : "Loading..."
+        epocsRemaining(calculateValuePerToken(), targetValue(), Number(rebaseRateInput.value)): "Loading..."
 }
 function updateDaysRemainingToken(){
     daysRemainingToken.innerText = tokenTarget() > 0 && totalStaked() > 0 &&  Number(rebaseRateInput.value) > 0  ?
-        epocsRemaining(calculateValuePerToken(), targetValue()) : "Loading..."
+        epocsRemaining(calculateValuePerToken(), targetValue(), Number(rebaseRateInput.value)) : "Loading..."
 }
 
 function updateFields(){
