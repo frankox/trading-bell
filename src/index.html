@@ -5,68 +5,72 @@
 <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta content="default-src 'self' https://min-api.cryptocompare.com/; script-src 'self' https://min-api.cryptocompare.com/; connect-src https://min-api.cryptocompare.com/" http-equiv="Content-Security-Policy">
+    <meta content="default-src 'self' https://unpkg.com/vue@next;
+     script-src 'self' https://unpkg.com/vue@next;
+      connect-src https://unpkg.com/vue@next" http-equiv="Content-Security-Policy">
     <meta http-equiv="X-UA-compatible" content="ie=edge">
     <title>OHM</title>
     <link rel="stylesheet" href="../assets/css/index.css">
 </head>
 <body>
-<div class = "rowHeader">
-    <div class="headerRowItem1" id="price-container">
-        <p class="subtext">current OHM/EUR</p>
-        <h1 id="price">loading...</h1>
+<div id="app">
+    <div class = "rowHeader">
+        <div class="headerRowItem1" id="price-container">
+            <p class="subtext">current OHM/EUR</p>
+            <h1 id="price">loading...</h1>
+        </div>
+        <div class="headerRowItem2">
+            <label for="target-price-input">SET TARGET: </label><input class="input-field" id="target-price-input" placeholder="EUR">
+            <label for="rebase-rate-input">REBASE RATE: </label><input class="input-field" id="rebase-rate-input" placeholder="%" value = "0.599">
+        </div>
     </div>
-    <div class="headerRowItem2">
-        <label for="target-price-input">SET TARGET: </label><input class="input-field" id="target-price-input" placeholder="EUR">
-        <label for="rebase-rate-input">REBASE RATE: </label><input class="input-field" id="rebase-rate-input" placeholder="%" value = "0.599">
+
+    <div class="row1">
+        <div class="rowItem1">
+            <label for="total-staked">TOTAL STAKED: </label><input class="input-field" id="total-staked"  value="1" placeholder="1">
+        </div>
+        <div class="rowItem2">
+            <h3 id="total-staked-value-title">EUR: </h3><span id="total-staked-value">Loading...</span>
+        </div>
+        <div class = "rowItem3">
+            <h3 id="rebase-rate-title">REBASE RATE: </h3><span id="rebase-rate">Loading...</span>
+        </div>
+    </div>
+
+    <div class="row1">
+        <div class = "rowItem1">
+            <label for="days-value">DAYS: </label><input class="input-field" id="days-value"  value="365" placeholder="365">
+        </div>
+        <div class="rowItem2">
+            <h3 id="days-token-title">STAKED: </h3><span id="days-token-value">Loading...</span>
+        </div>
+        <div class="rowItem3">
+            <h3 id="days-value-title">EUR: </h3><span id="days-money-value">Loading...</span>
+        </div>
+    </div>
+
+    <div class="row1">
+        <div class = "rowItem1">
+            <label for="target-value">TARGET €: </label><input class="input-field" id="target-value" value="100000" placeholder="100000">
+        </div>
+
+        <div class="rowItem3">
+            <h3 id="days-remaining-value-title">DAYS REMAINING: </h3><span id="days-remaining-value">Loading...</span>
+        </div>
+    </div>
+
+    <div class="row1">
+        <div class = "rowItem1">
+            <label for="token-target">TARGET STAKED: </label><input class="input-field" id="token-target" value="100" placeholder="100">
+        </div>
+
+        <div class="rowItem3">
+            <h3 id="days-remaining-token-title">DAYS REMAINING: </h3><span id="days-remaining-token">Loading...</span>
+        </div>
     </div>
 </div>
-
-<div class="row1">
-    <div class="rowItem1">
-        <label for="total-staked">TOTAL STAKED: </label><input class="input-field" id="total-staked"  value="1" placeholder="1">
-    </div>
-    <div class="rowItem2">
-        <h3 id="total-staked-value-title">EUR: </h3><span id="total-staked-value">Loading...</span>
-    </div>
-    <div class = "rowItem3">
-        <h3 id="rebase-rate-title">REBASE RATE: </h3><span id="rebase-rate">Loading...</span>
-    </div>
-</div>
-
-<div class="row2">
-    <div class = "rowItem1">
-        <label for="days-value">DAYS: </label><input class="input-field" id="days-value"  value="365" placeholder="365">
-    </div>
-    <div class="rowItem2">
-        <h3 id="days-token-title">STAKED: </h3><span id="days-token-value">Loading...</span>
-    </div>
-    <div class="rowItem3">
-        <h3 id="days-value-title">EUR: </h3><span id="days-money-value">Loading...</span>
-    </div>
-</div>
-
-<div class="row2">
-    <div class = "rowItem1">
-        <label for="target-value">TARGET €: </label><input class="input-field" id="target-value" value="100000" placeholder="100000">
-    </div>
-
-    <div class="rowItem3">
-        <h3 id="days-remaining-value-title">DAYS REMAINING: </h3><span id="days-remaining-value">Loading...</span>
-    </div>
-</div>
-
-<div class="row2">
-    <div class = "rowItem1">
-        <label for="token-target">TARGET STAKED: </label><input class="input-field" id="token-target" value="100" placeholder="100">
-    </div>
-
-    <div class="rowItem3">
-        <h3 id="days-remaining-token-title">DAYS REMAINING: </h3><span id="days-remaining-token">Loading...</span>
-    </div>
-</div>
-
 <!-- You can also require other files to run in this process -->
+<script src="https://unpkg.com/vue@next"></script>
 <script type="module"  src="indexPageRenderer.js" ></script>
 </body>
 </html>

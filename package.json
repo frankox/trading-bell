@@ -15,7 +15,6 @@
     "jest": "^27.3.1"
   },
   "dependencies": {
-    "axios": "^0.24.0",
     "coingecko-api": "^1.0.10"
   }
 }
